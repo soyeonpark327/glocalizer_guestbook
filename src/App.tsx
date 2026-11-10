@@ -11,6 +11,30 @@ function tiltFor(id: string) {
   return ((Math.abs(h) % 61) - 30) / 10
 }
 
+// 흐르는 띠: 최신 글 최대 20개를, 화면을 채울 만큼 반복
+function Marquee({ entries }: { entries: Entry[] }) {
+  if (entries.length === 0) return null
+  const base = entries.slice(0, 20)
+  let items = base
+  while (items.length < 10) items = items.concat(base)
+  const seconds = Math.max(20, items.length * 4)
+
+  return (
+    <div className="marquee" aria-hidden="true">
+      <div className="marquee-track" style={{ '--duration': `${seconds}s` } as CSSProperties}>
+        {[0, 1].map((copy) =>
+          items.map((entry, i) => (
+            <span className="chip" key={`${copy}-${i}-${entry.id}`}>
+              <span className="chip-message">{entry.message}</span>
+              <span className="chip-name">{entry.name || '익명'}</span>
+            </span>
+          )),
+        )}
+      </div>
+    </div>
+  )
+}
+
 const dateFmt = new Intl.DateTimeFormat('ko-KR', {
   year: 'numeric',
   month: 'long',
@@ -147,6 +171,8 @@ export default function App() {
             {submitting ? '남기는 중…' : '방명록 남기기'}
           </button>
         </form>
+
+        <Marquee entries={entries} />
 
         <section className="wall" aria-label="방명록">
           {loading ? (
