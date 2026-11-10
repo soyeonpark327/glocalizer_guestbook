@@ -31,6 +31,11 @@ export default function App() {
   const [submitError, setSubmitError] = useState('')
 
   useEffect(() => {
+    if (!supabase) {
+      setLoadError(true)
+      setLoading(false)
+      return
+    }
     supabase
       .from('entries')
       .select('*')
@@ -56,6 +61,11 @@ export default function App() {
     if (honeypot) {
       setName('')
       setMessage('')
+      return
+    }
+
+    if (!supabase) {
+      setSubmitError('사이트 설정이 아직 끝나지 않았어요. 잠시 후 다시 시도해주세요.')
       return
     }
 
