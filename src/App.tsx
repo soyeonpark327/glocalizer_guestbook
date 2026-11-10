@@ -1,52 +1,15 @@
-import { useEffect, useState, type CSSProperties, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { supabase, type Entry } from './supabase'
+import Pond from './Pond'
 
 const MAX_MESSAGE = 200
 const MAX_NAME = 30
-
-// id 기반으로 고정된 회전값(-3deg ~ 3deg) — 새로고침해도 카드가 흔들리지 않게
-function tiltFor(id: string) {
-  let h = 0
-  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) | 0
-  return ((Math.abs(h) % 61) - 30) / 10
-}
-
-// 흐르는 띠: 최신 글 최대 20개를, 화면을 채울 만큼 반복
-function Marquee({ entries }: { entries: Entry[] }) {
-  if (entries.length === 0) return null
-  const base = entries.slice(0, 20)
-  let items = base
-  while (items.length < 10) items = items.concat(base)
-  const seconds = Math.max(20, items.length * 4)
-
-  return (
-    <div className="marquee" aria-hidden="true">
-      <div className="marquee-track" style={{ '--duration': `${seconds}s` } as CSSProperties}>
-        {[0, 1].map((copy) =>
-          items.map((entry, i) => (
-            <span className="chip" key={`${copy}-${i}-${entry.id}`}>
-              <span className="chip-message">{entry.message}</span>
-              <span className="chip-name">{entry.name || '익명'}</span>
-            </span>
-          )),
-        )}
-      </div>
-    </div>
-  )
-}
-
-const dateFmt = new Intl.DateTimeFormat('ko-KR', {
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
-  hour: 'numeric',
-  minute: '2-digit',
-})
 
 export default function App() {
   const [entries, setEntries] = useState<Entry[]>([])
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState(false)
+  const [freshId, setFreshId] = useState<string | null>(null)
 
   const [name, setName] = useState('')
   const [message, setMessage] = useState('')
@@ -108,6 +71,7 @@ export default function App() {
       return
     }
     setEntries((prev) => [data, ...prev])
+    setFreshId(data.id)
     setName('')
     setMessage('')
   }
@@ -130,7 +94,7 @@ export default function App() {
               type="text"
               value={name}
               maxLength={MAX_NAME}
-              placeholder="익명"
+              placeholder="비우면 귀여운 닉네임이 붙어요"
               onChange={(e) => setName(e.target.value)}
             />
           </label>
@@ -172,36 +136,16 @@ export default function App() {
           </button>
         </form>
 
-        <Marquee entries={entries} />
-
-        <section className="wall" aria-label="방명록">
-          {loading ? (
-            <p className="empty">불러오는 중이에요…</p>
-          ) : loadError ? (
-            <p className="empty">방명록을 불러오지 못했어요. 새로고침 해주세요.</p>
-          ) : entries.length === 0 ? (
-            <p className="empty">아직 남겨진 글이 없어요.<br />첫 번째 한마디의 주인공이 되어주세요!</p>
-          ) : (
-            <ul className="grid">
-              {entries.map((entry) => (
-                <li
-                  key={entry.id}
-                  className="note"
-                  style={{ '--tilt': `${tiltFor(entry.id)}deg` } as CSSProperties}
-                >
-                  <p className="note-message">{entry.message}</p>
-                  <div className="note-meta">
-                    <strong>{entry.name || '익명'}</strong>
-                    <time dateTime={entry.created_at}>
-                      {dateFmt.format(new Date(entry.created_at))}
-                    </time>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
+        {loading ? (
+          <p className="status">불러오는 중이에요…</p>
+        ) : loadError ? (
+          <p className="status">방명록을 불러오지 못했어요. 새로고침 해주세요.</p>
+        ) : entries.length === 0 ? (
+          <p className="status">아직 남겨진 글이 없어요.<br />첫 번째 한마디의 주인공이 되어주세요!</p>
+        ) : null}
       </main>
+
+      <Pond entries={entries} freshId={freshId} />
     </>
   )
 }
