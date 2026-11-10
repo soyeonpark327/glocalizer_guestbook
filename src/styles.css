@@ -73,14 +73,14 @@ body {
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 16px 24px;
+  padding: 0 16px;
 }
 
 /* ---------- 글쓰기 폼 ---------- */
 .write {
   position: relative;
   max-width: 560px;
-  margin: -44px auto 48px;
+  margin: -44px auto 20px;
   padding: 24px 20px;
   background: #fff;
   border-radius: var(--radius);
@@ -157,7 +157,7 @@ input:focus, textarea:focus { border-color: var(--sage); background: #fff; }
 /* ---------- 연못: 글들이 물고기처럼 떠다니는 영역 ---------- */
 .pond {
   position: relative;
-  height: max(460px, 70vh);
+  height: clamp(240px, 36vh, 340px);
   overflow: hidden;
   container-type: inline-size;
   /* 아래로 갈수록 아주 옅은 세이지빛 물 */

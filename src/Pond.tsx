@@ -32,12 +32,12 @@ function makeFish(entry: Entry, lane: number, lanes: number, opts: { initial?: b
     lane,
     temp: !!opts.temp,
     fresh: !!opts.fresh,
-    top: ((slot + 0.1 + Math.random() * 0.8) / Math.max(lanes, 1)) * 76 + 2,
+    top: ((slot + 0.1 + Math.random() * 0.8) / Math.max(lanes, 1)) * 64 + 2,
     x: 4 + Math.random() * 70,
     depth,
     duration,
     // 처음 로딩 땐 이미 헤엄치는 중인 것처럼 음수 딜레이, 이후엔 살짝 쉬었다 등장
-    delay: opts.initial ? -Math.random() * duration : opts.fresh ? 0 : Math.random() * 4,
+    delay: opts.initial ? -Math.random() * duration : opts.fresh ? 0 : Math.random() * 1.5,
     rtl: Math.random() < 0.5,
     bobDelay: -Math.random() * 4,
   }
