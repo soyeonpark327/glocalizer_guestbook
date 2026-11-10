@@ -1,16 +1,20 @@
 :root {
-  /* Glocalizer 로고 기반 팔레트 */
-  --sage: #90a890;
-  --forest: #163024;
-  --cream: #f0d8c0;
-  --cream-soft: #fbf3ea;
+  /* Glocalizer 로고(ver2-2)에서 추출한 팔레트 */
+  --sage-light: #a9b9a0; /* 링 오른쪽 위 하이라이트 */
+  --sage: #83a48e;
+  --sage-mid: #5d806d;
+  --forest: #163024;     /* 링 아래쪽 */
+  --cream: #f4e0c4;      /* 입 모양 바 */
+  --cream-shadow: #dcc3a3;
+  --cream-soft: #fcf5ec;
   --mint-soft: #f2f6f2;
   --ink: #1f2a24;
   --ink-muted: #6b776f;
   --line: #e3e9e3;
   --bg: #ffffff;
 
-  --grad: linear-gradient(135deg, var(--sage) 0%, var(--forest) 100%);
+  /* 로고처럼 오른쪽 위(밝음) → 왼쪽 아래(짙음) */
+  --grad: linear-gradient(225deg, var(--sage-light) 0%, var(--sage-mid) 50%, var(--forest) 100%);
   --radius: 22px;
   --shadow: 0 6px 20px rgba(22, 48, 36, 0.08), 0 2px 6px rgba(22, 48, 36, 0.05);
   --shadow-hover: 0 12px 30px rgba(22, 48, 36, 0.14);
@@ -134,11 +138,11 @@ input:focus, textarea:focus { border-color: var(--sage); background: #fff; }
   border-radius: 999px;
   padding: 14px 20px;
   cursor: pointer;
-  box-shadow: 0 4px 0 #d9bc9f;
+  box-shadow: 0 4px 0 var(--cream-shadow);
   transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s;
 }
-.submit:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 5px 0 #d9bc9f; }
-.submit:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 #d9bc9f; }
+.submit:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 5px 0 var(--cream-shadow); }
+.submit:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 var(--cream-shadow); }
 .submit:disabled { opacity: 0.55; cursor: not-allowed; }
 .submit:focus-visible { outline: 3px solid var(--sage); outline-offset: 3px; }
 
