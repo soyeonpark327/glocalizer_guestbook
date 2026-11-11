@@ -108,10 +108,10 @@ export default function Pond({ entries, freshId }: { entries: Entry[]; freshId: 
   }
 
   return (
-    <section className="pond" aria-label="방명록">
-      {entries.length === 0 ? null : (
-        <>
-          {fish.map((f) => (
+    <section className="pond" aria-hidden="true">
+      {entries.length === 0
+        ? null
+        : fish.map((f) => (
             <div
               key={f.key}
               className={`fish ${f.rtl ? 'rtl' : 'ltr'}${f.fresh ? ' fresh' : ''}`}
@@ -134,17 +134,6 @@ export default function Pond({ entries, freshId }: { entries: Entry[]; freshId: 
               </div>
             </div>
           ))}
-
-          {/* 화면낭독기용: 전체 글 목록 */}
-          <ul className="sr-only">
-            {entries.map((e) => (
-              <li key={e.id}>
-                {displayName(e)}: {e.message}
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
     </section>
   )
 }

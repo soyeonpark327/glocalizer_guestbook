@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { supabase, type Entry } from './supabase'
 import Pond from './Pond'
+import { displayName } from './nickname'
 
 const MAX_MESSAGE = 200
 const MAX_NAME = 30
@@ -146,6 +147,32 @@ export default function App() {
       </main>
 
       <Pond entries={entries} freshId={freshId} />
+
+      {entries.length > 0 && (
+        <section className="container list" aria-labelledby="list-title">
+          <h2 className="list-title" id="list-title">
+            모든 방명록 <span className="list-count">{entries.length}</span>
+          </h2>
+          <div className="table-wrap">
+            <table className="entries-table">
+              <thead>
+                <tr>
+                  <th scope="col">이름</th>
+                  <th scope="col">내용</th>
+                </tr>
+              </thead>
+              <tbody>
+                {entries.map((entry) => (
+                  <tr key={entry.id} className={entry.id === freshId ? 'fresh' : undefined}>
+                    <td className="col-name">{displayName(entry)}</td>
+                    <td className="col-message">{entry.message}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
     </>
   )
 }
